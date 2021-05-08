@@ -1,0 +1,16 @@
+
+body {
+  background-color: #28865f52;
+}
+
+.centered {
+    padding-top: 200px;
+    text-align: center;
+}
+
+.secret-text {
+  text-align: center;
+  font-size: 2rem;
+  color: rgb(248, 242, 242);
+  background-color: rgb(70, 27, 56);
+}
