@@ -1,6 +1,6 @@
 
 body {
-  background-color: #dabaa4;
+  background-color: #c895d4;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -8,41 +8,15 @@ body {
 
 footer{
   color: rgb(0, 0, 0);
+  padding: 30px;
   margin-top: auto;
 }
 
-/* Style the header */
-.header {
-  padding: 10px 16px;
-  background: rgb(75, 63, 63);
-  color: #f1f1f1;
-}
 
-/* Page content */
-.content {
-  padding: 16px;
-}
-
-/* The sticky class is added to the header with JS when it reaches its scroll position */
-.sticky {
-  position: fixed;
-  top: 0;
-  width: 100%
-}
-
-/* Add some top padding to the page content to prevent sudden quick movement (as the header gets a new position at the top of the page (position:fixed and top:0) */
-.sticky + .content {
-  padding-top: 102px;
-}
 
 .centered {
-    padding-top: 200px;
+    padding-top: 100px;
     text-align: center;
-}
-
-::placeholder {
-  color: rgb(121, 88, 88);
-  opacity: 1;
 }
 
 
@@ -52,3 +26,6 @@ footer{
   color: rgb(255, 255, 255);
   background-color: rgb(0, 0, 0);
 }
+
+
+
