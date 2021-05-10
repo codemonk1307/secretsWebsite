@@ -10,6 +10,7 @@ const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
+const InstagramStrategy = require("passport-instagram").Strategy;
 const findOrCreate = require('mongoose-findorcreate');
 
 const app = express();
@@ -36,7 +37,8 @@ const userSchema = new mongoose.Schema({
   email: String,
   password: String,
   googleId: String,
-  facebookId: String
+  facebookId: String,
+  instagramId: String
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -46,8 +48,7 @@ const User = new mongoose.model("User", userSchema)
 
 passport.use(User.createStrategy());
 
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
+
 // http://www.passportjs.org/docs/configure/   (get to this link)
 passport.serializeUser(function (user, done) {
   done(null, user.id);
@@ -93,6 +94,24 @@ passport.use(new FacebookStrategy({
   }
 ));
 
+// npm install passport-instagram
+// https://github.com/jaredhanson/passport-instagram
+passport.use(new InstagramStrategy({
+  clientID: process.env.INSTAGRAM_CLIENT_ID,
+  clientSecret: process.env.INSTAGRAM_CLIENT_SECRET,
+  callbackURL: "http://localhost:3000/auth/instagram/secrets"
+},
+  function (accessToken, refreshToken, profile, cb) {
+    console.log(profile);
+
+    User.findOrCreate({ instagramId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
+
+
+
 
 
 app.get("/", function (req, res) {
@@ -113,12 +132,23 @@ app.get("/auth/google/secrets",
     res.redirect("/secrets");
   });
 
-// Facebook Sign-in/Sign-up authentication   authType: 'reauthenticate', 'user_friends', 'manage_pages'  { scope: ["email"] }
+// Facebook Sign-in/Sign-up authentication
 app.get("/auth/facebook",
   passport.authenticate("facebook"));
 
 app.get("/auth/facebook/secrets",
   passport.authenticate("facebook", { failureRedirect: "/login" }),
+  function (req, res) {
+    // Successful authentication redirects to secrets page
+    res.redirect("/secrets");
+  });
+
+// Instagram Sign-in/Sign-up authentication
+app.get("/auth/instagram",
+  passport.authenticate("instagram"));
+
+app.get("/auth/instagram/secrets",
+  passport.authenticate("instagram", { failureRedirect: "/login" }),
   function (req, res) {
     // Successful authentication redirects to secrets page
     res.redirect("/secrets");
