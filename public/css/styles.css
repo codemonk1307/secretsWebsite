@@ -1,6 +1,6 @@
 
 body {
-  background-color: #c895d4;
+  background-color: #89878a;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -8,23 +8,20 @@ body {
 
 footer{
   color: rgb(0, 0, 0);
-  padding: 30px;
+  padding: 20px;
   margin-top: auto;
 }
-
-
 
 .centered {
     padding-top: 100px;
     text-align: center;
 }
 
-
 .secret-text {
   text-align: center;
   font-size: 2rem;
-  color: rgb(255, 255, 255);
-  background-color: rgb(0, 0, 0);
+  color: rgb(12, 12, 12);
+  background-color: rgb(248, 248, 248);
 }
 
 

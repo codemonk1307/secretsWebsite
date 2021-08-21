@@ -38,7 +38,8 @@ const userSchema = new mongoose.Schema({
   password: String,
   googleId: String,
   facebookId: String,
-  instagramId: String
+  instagramId: String,
+  secret: String
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -111,14 +112,9 @@ passport.use(new InstagramStrategy({
 ));
 
 
-
-
-
 app.get("/", function (req, res) {
   res.render("home");
 });
-
-
 
 
 // Google Sign-in/Sign-up authentication
@@ -166,17 +162,50 @@ app.get("/register", function (req, res) {
 });
 
 app.get("/secrets", function (req, res) {
+  User.find({ "secret": { $ne: null } }, function (err, foundUsers) {
+    if (err) {
+      console.log(err);
+    } else {
+      if (foundUsers) {
+        res.render("secrets", { usersWithSecrets: foundUsers });
+      }
+    }
+  });
+});
+
+app.get("/submit", function (req, res) {
   if (req.isAuthenticated()) {
-    res.render("secrets");
+    res.render("submit");
   } else {
     res.render("login");
   }
+});
+
+app.post("/submit", function (req, res) {
+  const submittedSecret = req.body.secret;
+
+  User.findById(req.user.id, function (err, foundUser) {
+    if (err) {
+      console.log(err);
+    } else {
+      if (foundUser) {
+        console.log("hellopp");
+        foundUser.secret = submittedSecret;
+        foundUser.save(function () {
+          console.log("hellopp");
+          res.redirect("/secrets");
+        });
+      }
+    }
+  });
 });
 
 app.get("/logout", function (req, res) {
   req.logout();
   res.redirect("/");
 });
+
+
 
 app.post("/register", function (req, res) {
 
